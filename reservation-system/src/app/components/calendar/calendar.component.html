@@ -1,0 +1,223 @@
+<div class="row" style="margin-top:100px;">
+  <div class="col-md-7" style="margin-bottom: 10px;">
+
+    <div class="row" >
+      <label>Appointment availability check</label>
+    </div>
+    <div class="row" >
+      <div class="form-group col-sm-6">
+        
+        <label for="activeStartDate">From:</label>
+        <app-date-time-picker [(ngModel)]="fromDateModel" name="activeStartDate"></app-date-time-picker>
+      </div>
+      
+    </div>
+    <div class="row" >
+      <div class="form-group col-sm-6">
+        <label for="activeEndDate">To:</label>
+        <app-date-time-picker [(ngModel)]="toDateModel" name="activeEndDate"></app-date-time-picker>
+      </div>
+      
+    </div>
+    <div class="row" >
+      <div class="form-group col-sm-6">
+        <a  style="color:#fff; cursor: pointer;" class="btn btn-primary">Check Availability</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-5" style="margin-top:40px;" *ngIf="field">
+
+    <!-- DISPLAY FIELD DETAILS -->
+    <div class="card mb-3">
+      <img src="{{ field.imageURL }}" height="220px" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ field.title }}</h5>
+        <p class="card-text text-center">{{ field.priceHour }} RS / Hour </p>
+        <p class="card-text" style="font-size: 18px;"><small class="text-muted">Program: {{ field.startProgram }}:00 -
+            {{ field.endProgram }}:00</small> </p>
+        <p class="card-text" style="font-size: 18px;"><small class="text-muted">Description: {{ field.description }}</small></p>
+        <p class="card-text" style="font-size: 18px;"><small class="text-muted">Address: {{ field.address }}</small></p>
+      </div>
+    </div>
+    <!-- --------------------- -->
+
+    <!-- SHOW RESERVATION DETAIL  -->
+    <div *ngIf="showReservationDetail" class="card" style="margin-bottom: 10px;">
+      <div class="card-header">
+        <div class="float-left">
+          Reservation Detail
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="form-row">
+          <div class="col-md-6">
+
+            <div class="form-group">
+              <!-- <label>Reservation No:</label> -->
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">#</div>
+                </div>
+                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                  value="{{ reservationForm.id }}" readonly>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <div>
+                <!-- <label>Reservation Name:</label> -->
+                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                  value="{{ reservationForm.title }}" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <div>
+                <!-- <label>Start Time:</label> -->
+                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                  value=" Start: {{ start }}" readonly />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <div>
+                <!-- <label>End Time:</label> -->
+                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                  value=" End: {{ end }}" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div>
+            <!-- <label>Duration Hours:</label> -->
+            <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+              value="Duration: {{ duration }} h" readonly />
+          </div>
+        </div>
+
+
+
+      </div>
+      <div class="card-footer">
+        <div class="float-right" style="margin-right:30px">
+          <span>Total: {{ total }} DKK</span>
+        </div>
+
+      </div>
+    </div>
+    <!-- --------------------- -->
+
+    <!-- SHOW PROCEED TO PAYMENT BUTTON -->
+    <div class="float-right" style="margin: 10xpx;">
+      <button (click)="reserveNow()" [disabled]="disabledReserveNowBtn" class="btn btn-warning"><i
+          class="fa fa-credit-card-alt" aria-hidden="true"></i> Reserve Now </button>
+    </div>
+    <!-- --------------------- -->
+  </div>
+</div>
+
+
+
+<!-------------------------------- SHOW MODAL FORM  ------------------------->
+
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">{{ submitType }} Reservation</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div *ngIf="showNew">
+
+
+      <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit(f)">
+
+        <input type="hidden" name="primaryColor" #primaryColor="ngModel" [(ngModel)]="reservationForm.primaryColor">
+        <input type="hidden" name="secondaryColor" #secondaryColor="ngModel"[(ngModel)]="reservationForm.secondaryColor">
+
+        <div class="form-row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Reservation No:</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">#</div>
+                </div>
+                <input class="form-control" name="id" #id="ngModel"
+                  [(ngModel)]="reservationForm.id" readonly>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Total</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">DKK</div>
+                </div>
+                <input name="total" #total="ngModel" [(ngModel)]="reservationForm.total" class="form-control" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div>
+            <label>Reservation Name:</label>
+            <input class="form-control" name="title" #title="ngModel" [(ngModel)]="reservationForm.title"
+              (change)="updateTotal($event.target.value)">
+          </div>
+          <div style="color:red;" *ngIf="f.submitted && !title.valid">Reservation Name is required!</div>
+
+        </div>
+
+        <div class="form-group">
+          <div>
+            <label>Start:</label>
+            <input class="form-control" name="start" #start="ngModel" [(ngModel)]="reservationForm.start"
+              (ngModelChange)="getStartTimeSelection($event)" placeholder="Start Time" [minute-step]="minuteStep"
+              (closing$)="show = true" [min-hour]="minHour" [max-hour]="maxHour" [close-on-select]="false" min="0" max="60"
+              ngui-datetime-picker required />
+          </div>
+          <div style="color: red;" *ngIf="f.submitted && !start.valid">Start time is required!</div>
+
+        </div>
+
+        <div class="form-group">
+          <div>
+            <label>End:</label>
+            <input class="form-control" name="end" #end="ngModel" [(ngModel)]="reservationForm.end"
+              (ngModelChange)="getEndTimeSelection($event)" placeholder="End Time" [minute-step]="minuteStep"
+              [min-hour]="minHour" [max-hour]="maxHour" [close-on-select]="false" min="0" max="60" ngui-datetime-picker  />
+          </div>
+          <div style="color: red;" *ngIf="f.submitted && !start.valid">End time is required!</div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button (click)="close()" class="btn-sm btn-primary" style="margin-right:5px;"> Cancel </button>
+          <button type="submit" class="btn-sm btn-success">{{ submitType }}</button>
+        </div>
+      </form>
+
+    </div>
+
+  </div>
+</ng-template>
+<!------------------------------------------------------------------------------>

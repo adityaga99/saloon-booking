@@ -1,0 +1,9 @@
+h5 {
+    background-color: #fffffffa;
+    padding: 1rem;
+    margin: 0px;
+    text-align: center;
+}
+.spacer{
+    flex: 1 1 auto;
+}

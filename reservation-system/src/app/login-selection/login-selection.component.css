@@ -1,0 +1,7 @@
+#sect1 {  
+    height: 1000 px;  
+    color: #17a2b8;
+    background-image: url("../../assets/img-carousel/logo.png");  
+    background-size: 100% ;  
+    background-size: cover;  
+}   
